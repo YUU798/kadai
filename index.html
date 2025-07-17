@@ -2,45 +2,90 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>家計簿マックス</title>
+  <title>ペイマックス</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 20px;
-      text-align: center;
+      padding: 40px 20px;
       background-color: #F6ADC6;
-      color: #2b2b2b;
+      color: #2a2a2a;
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;    /* 真ん中寄せ */
+      box-sizing: border-box;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
-    .section {
-      margin-bottom: 20px;
+
+    .highlight {
+      background-color: #fddde6;
+      padding: 15px 25px;
+      border-radius: 6px;
       display: inline-block;
-      text-align: left;
+      margin: 0 0 40px 0;
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: center;   /* 真ん中寄せ */
     }
+
+    .section {
+      margin-bottom: 25px;
+      text-align: center;   /* 真ん中寄せ */
+      width: 100%;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
     input[type="number"] {
-      width: 100px;
+      width: 120px;
+      padding: 6px 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+      border-radius: 4px;
+      border: 1px solid #ccc;
     }
+
     button {
-      margin-left: 10px;
+      margin-left: 12px;
+      padding: 8px 14px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      border: none;
+      background-color: #ec008c;
+      color: white;
+      transition: background-color 0.3s ease;
     }
+    button:hover {
+      background-color: #d60079;
+    }
+
     pre {
       background: #f0f0f0;
       padding: 10px;
-      text-align: left;
+      text-align: center;   /* 真ん中寄せ */
       white-space: pre-wrap;
-      color: #666666; /* ← 紺色からグレーに変更 */
-    }
-    #chartContainer {
-      width: 100%;
+      color: #2a2a2a;
       max-width: 600px;
       margin: 0 auto;
-      margin-top: 20px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+
+    #chartContainer {
+      width: 100%;
+      max-width: 700px;
+      margin: 30px auto 0 auto;
     }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.2/chart.umd.js"></script>
 </head>
 <body>
 
-  <h1>あなたのお財布を守ります</h1>
+  <h1 class="highlight">あなたのお財布を守ります</h1>
 
   <div class="section">
     <label>目標金額: <input type="number" id="goalAmount" step="1" /></label>
@@ -53,11 +98,11 @@
     <button onclick="addTransaction('出金')">出金</button>
   </div>
 
-  <div class="section" style="text-align: center;">
+  <div class="section">
     <div>
       <strong>現在の残高:</strong> <span id="balance">0</span> 円<br/>
       <strong>目標金額:</strong> <span id="goalDisplay">0</span> 円<br/>
-      <strong>(^_-)-☆＜</strong> <span id="comment">未設定</span>
+      <strong>(・・)-☆＜</strong> <span id="comment">未設定</span>
     </div>
   </div>
 
@@ -101,8 +146,8 @@
       document.getElementById("balance").textContent = balance;
       document.getElementById("goalDisplay").textContent = goal;
       const comment = balance >= goal
-        ? "や、やるじゃん・・"
-        : "マズい！控えて！";
+        ? "とってもいい子でしたね"
+        : "あなたのお財布を守ります・・";
       document.getElementById("comment").textContent = comment;
     }
 
@@ -171,7 +216,22 @@
         },
         options: {
           scales: {
-            y: { beginAtZero: true }
+            y: {
+              beginAtZero: true,
+              ticks: { color: '#444' },
+              grid: { color: '#EC008C' }
+            },
+            x: {
+              ticks: { color: '#444' },
+              grid: { color: '#EC008C' }
+            }
+          },
+          plugins: {
+            legend: {
+              labels: {
+                color: '#444'
+              }
+            }
           },
           animation: false
         }
@@ -179,7 +239,7 @@
     }
 
     function resetData() {
-      if (!confirm("本当にリセットする？")) return;
+      if (!confirm("本当にリセットしますか？")) return;
       balance = 0;
       goal = 0;
       transactions = [];
